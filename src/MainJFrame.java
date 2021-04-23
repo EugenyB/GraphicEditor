@@ -3,6 +3,8 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPopupMenu.Separator;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -10,9 +12,6 @@ import java.awt.event.ActionEvent;
  */
 public class MainJFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainJFrame
-     */
     public MainJFrame() {
         initComponents();
     }
@@ -22,7 +21,7 @@ public class MainJFrame extends javax.swing.JFrame {
         buttonGroup1 = new ButtonGroup();
         jPopupMenu1 = new JPopupMenu();
         jMenuItem5 = new JMenuItem();
-        jPanel1 = new JPanel();
+        drawPanel = new MyPanel();
         jMenuBar1 = new JMenuBar();
         jMenu1 = new JMenu();
         jMenuItem1 = new JMenuItem();
@@ -30,11 +29,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jSeparator1 = new Separator();
         jMenuItem3 = new JMenuItem();
         jMenu2 = new JMenu();
-        jRadioButtonMenuItem1 = new JRadioButtonMenuItem();
-        jRadioButtonMenuItem2 = new JRadioButtonMenuItem();
-        jRadioButtonMenuItem3 = new JRadioButtonMenuItem();
+        circleRadioButtonMenuItem = new JRadioButtonMenuItem();
+        rectangleRadioButtonMenuItem = new JRadioButtonMenuItem();
+        triangleRadioButtonMenuItem = new JRadioButtonMenuItem();
         jSeparator2 = new Separator();
-        jRadioButtonMenuItem4 = new JRadioButtonMenuItem();
+        moveResizeRadioButtonMenuItem = new JRadioButtonMenuItem();
         jMenu3 = new JMenu();
         jMenuItem4 = new JMenuItem();
 
@@ -44,11 +43,11 @@ public class MainJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setComponentPopupMenu(jPopupMenu1);
+        drawPanel.setComponentPopupMenu(jPopupMenu1);
 
         GroupLayout jPanel1Layout;
-        jPanel1Layout = new GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout = new GroupLayout(drawPanel);
+        drawPanel.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(Alignment.LEADING)
                         .addGap(0, 474, Short.MAX_VALUE)
@@ -76,23 +75,23 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jMenu2.setText("Edit");
 
-        buttonGroup1.add(jRadioButtonMenuItem1);
-        jRadioButtonMenuItem1.setSelected(true);
-        jRadioButtonMenuItem1.setText("Circle");
-        jMenu2.add(jRadioButtonMenuItem1);
+        buttonGroup1.add(circleRadioButtonMenuItem);
+        circleRadioButtonMenuItem.setSelected(true);
+        circleRadioButtonMenuItem.setText("Circle");
+        jMenu2.add(circleRadioButtonMenuItem);
 
-        buttonGroup1.add(jRadioButtonMenuItem2);
-        jRadioButtonMenuItem2.setText("Rectangle");
-        jMenu2.add(jRadioButtonMenuItem2);
+        buttonGroup1.add(rectangleRadioButtonMenuItem);
+        rectangleRadioButtonMenuItem.setText("Rectangle");
+        jMenu2.add(rectangleRadioButtonMenuItem);
 
-        buttonGroup1.add(jRadioButtonMenuItem3);
-        jRadioButtonMenuItem3.setText("Triangle");
-        jMenu2.add(jRadioButtonMenuItem3);
+        buttonGroup1.add(triangleRadioButtonMenuItem);
+        triangleRadioButtonMenuItem.setText("Triangle");
+        jMenu2.add(triangleRadioButtonMenuItem);
         jMenu2.add(jSeparator2);
 
-        buttonGroup1.add(jRadioButtonMenuItem4);
-        jRadioButtonMenuItem4.setText("Move / Resize");
-        jMenu2.add(jRadioButtonMenuItem4);
+        buttonGroup1.add(moveResizeRadioButtonMenuItem);
+        moveResizeRadioButtonMenuItem.setText("Move / Resize");
+        jMenu2.add(moveResizeRadioButtonMenuItem);
 
         jMenuBar1.add(jMenu2);
 
@@ -112,16 +111,27 @@ public class MainJFrame extends javax.swing.JFrame {
                 layout.createParallelGroup(Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(drawPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(drawPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addContainerGap())
         );
+
+        drawPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (moveResizeRadioButtonMenuItem.isSelected()) {
+                    int x = e.getX();
+                    int y = e.getY();
+                    System.out.println(">>>" + x + " " + y);
+                }
+            }
+        });
 
         pack();
     }
@@ -142,9 +152,7 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainJFrame().setVisible(true));
     }
@@ -159,12 +167,12 @@ public class MainJFrame extends javax.swing.JFrame {
     private JMenuItem jMenuItem3;
     private JMenuItem jMenuItem4;
     private JMenuItem jMenuItem5;
-    private JPanel jPanel1;
+    private MyPanel drawPanel;
     private JPopupMenu jPopupMenu1;
-    private JRadioButtonMenuItem jRadioButtonMenuItem1;
-    private JRadioButtonMenuItem jRadioButtonMenuItem2;
-    private JRadioButtonMenuItem jRadioButtonMenuItem3;
-    private JRadioButtonMenuItem jRadioButtonMenuItem4;
+    private JRadioButtonMenuItem circleRadioButtonMenuItem;
+    private JRadioButtonMenuItem rectangleRadioButtonMenuItem;
+    private JRadioButtonMenuItem triangleRadioButtonMenuItem;
+    private JRadioButtonMenuItem moveResizeRadioButtonMenuItem;
     private Separator jSeparator1;
     private Separator jSeparator2;
 
