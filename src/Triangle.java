@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class Triangle extends Figure {
     private Point[] points;
 
-    public Triangle(Point[] pts, Color lineColor, Color fillColor) {
+    public Triangle(Color lineColor, Color fillColor, Point... pts) {
         super(lineColor, fillColor);
         points = Arrays.copyOf(pts,3);
     }
@@ -57,6 +57,14 @@ public class Triangle extends Figure {
         int ay = y2-y1;
         int by = y3-y1;
         return Math.abs(ax*by-bx*ay);
+    }
+
+    public String toString() {
+        return "T " + points[0].getX() + " " + points[0].getY() + " "
+                + points[1].getX() + " " + points[1].getY() + " "
+                + points[2].getX() + " " + points[2].getY() + " "
+                + Integer.toHexString(getLineColor().getRGB()).substring(0, 6).toUpperCase() + " "
+                + Integer.toHexString(getFillColor().getRGB()).substring(0,6).toUpperCase();
     }
 
 }

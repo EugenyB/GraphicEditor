@@ -6,14 +6,16 @@ import java.util.List;
 public class MyPanel extends JPanel {
 
     private List<Figure> figures;
+    private Color lineColor = Color.BLACK;
+    private Color fillColor = Color.WHITE;
 
     public MyPanel() {
-        figures = new ArrayList<>();
+        //figures = FileManager.readFromFile("figures.txt");
         // todo убрать в финальной версии
-        figures.add(new Circle(new Point(100,100), 50, Color.BLUE, Color.WHITE));
-        figures.add(new Circle(new Point(200,200), 70, Color.RED, Color.YELLOW));
-        Point[] pts = { new Point(100,100), new Point(200, 200), new Point(350, 200) };
-        figures.add(new Triangle(pts, Color.RED, Color.BLUE));
+        //figures.add(new Circle(Color.BLUE, Color.WHITE, 50, new Point(100,100)));
+        //figures.add(new Circle(Color.RED, Color.YELLOW, 70, new Point(200,200)));
+        //figures.add(new Triangle(Color.RED, Color.BLUE, new Point(100,100), new Point(200, 200), new Point(350, 200)));
+        //figures.add(new Rectangle(Color.GREEN, Color.MAGENTA, new Point(200,200), new Point(300, 300)));
         // ------------------------------
     }
 
@@ -23,6 +25,22 @@ public class MyPanel extends JPanel {
 
     public void setFigures(List<Figure> figures) {
         this.figures = figures;
+    }
+
+    public Color getLineColor() {
+        return lineColor;
+    }
+
+    public void setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    public Color getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
     }
 
     @Override

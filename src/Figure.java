@@ -11,6 +11,45 @@ public abstract class Figure {
         selected = false;
     }
 
+    public static Figure parseFigure(String line) {
+        String[] s = line.split(" ");
+        switch (s[0]) {
+            case "C": {
+                int x = Integer.parseInt(s[1]);
+                int y = Integer.parseInt(s[2]);
+                int radius = Integer.parseInt(s[3]);
+                int lineColor = Integer.valueOf(s[4], 16);
+                int fillColor = Integer.valueOf(s[5], 16);
+
+                return new Circle(new Color(lineColor), new Color(fillColor), radius, new Point(x, y));
+            }
+            case "R": {
+                int x1 = Integer.parseInt(s[1]);
+                int y1 = Integer.parseInt(s[2]);
+                int x2 = Integer.parseInt(s[3]);
+                int y2 = Integer.parseInt(s[4]);
+                int lineColor = Integer.valueOf(s[5], 16);
+                int fillColor = Integer.valueOf(s[6], 16);
+
+                return new Rectangle(new Color(lineColor), new Color(fillColor), new Point(x1, y1), new Point(x2, y2));
+            }
+            case "T": {
+                int x1 = Integer.parseInt(s[1]);
+                int y1 = Integer.parseInt(s[2]);
+                int x2 = Integer.parseInt(s[3]);
+                int y2 = Integer.parseInt(s[4]);
+                int x3 = Integer.parseInt(s[5]);
+                int y3 = Integer.parseInt(s[6]);
+                int lineColor = Integer.valueOf(s[7], 16);
+                int fillColor = Integer.valueOf(s[8], 16);
+
+                return new Triangle(new Color(lineColor), new Color(fillColor),
+                        new Point(x1,y1), new Point(x2,y2), new Point(x3,y3));
+            }
+        }
+        return null;
+    }
+
     public void draw(Graphics2D g) {
         if (selected) {
             drawSelected(g);

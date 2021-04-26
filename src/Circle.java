@@ -4,7 +4,7 @@ public class Circle extends Figure {
     private Point center;
     private int radius;
 
-    public Circle(Point center, int radius, Color lineColor, Color fillColor) {
+    public Circle(Color lineColor, Color fillColor, int radius, Point center) {
         super(lineColor, fillColor);
         this.center = center;
         this.radius = radius;
@@ -36,5 +36,12 @@ public class Circle extends Figure {
     public boolean containsPoint(Point point) {
         double distance = Math.hypot(center.getX() - point.getX(), center.getY() - point.getY());
         return distance <= radius;
+    }
+
+    @Override
+    public String toString() {
+        return "C " + center.getX() + " " + center.getY() + " " + radius + " "
+                + Integer.toHexString(getLineColor().getRGB()).substring(0, 6).toUpperCase() + " "
+                + Integer.toHexString(getFillColor().getRGB()).substring(0,6).toUpperCase();
     }
 }
