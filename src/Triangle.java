@@ -63,8 +63,8 @@ public class Triangle extends Figure {
         return "T " + points[0].getX() + " " + points[0].getY() + " "
                 + points[1].getX() + " " + points[1].getY() + " "
                 + points[2].getX() + " " + points[2].getY() + " "
-                + Integer.toHexString(getLineColor().getRGB()).substring(0, 6).toUpperCase() + " "
-                + Integer.toHexString(getFillColor().getRGB()).substring(0,6).toUpperCase();
+                + Integer.toHexString(getLineColor().getRGB()).substring(2).toUpperCase() + " "
+                + Integer.toHexString(getFillColor().getRGB()).substring(2).toUpperCase();
     }
 
 }

@@ -41,7 +41,7 @@ public class Circle extends Figure {
     @Override
     public String toString() {
         return "C " + center.getX() + " " + center.getY() + " " + radius + " "
-                + Integer.toHexString(getLineColor().getRGB()).substring(0, 6).toUpperCase() + " "
-                + Integer.toHexString(getFillColor().getRGB()).substring(0,6).toUpperCase();
+                + Integer.toHexString(getLineColor().getRGB()).substring(2).toUpperCase() + " "
+                + Integer.toHexString(getFillColor().getRGB()).substring(2).toUpperCase();
     }
 }

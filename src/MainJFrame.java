@@ -28,7 +28,7 @@ public class MainJFrame extends javax.swing.JFrame {
         openMenuItem = new JMenuItem();
         saveMenuItem = new JMenuItem();
         jSeparator1 = new Separator();
-        jMenuItem3 = new JMenuItem();
+        exitMenuItem = new JMenuItem();
         jMenu2 = new JMenu();
         circleRadioButtonMenuItem = new JRadioButtonMenuItem();
         rectangleRadioButtonMenuItem = new JRadioButtonMenuItem();
@@ -73,30 +73,34 @@ public class MainJFrame extends javax.swing.JFrame {
         jMenu1.add(saveMenuItem);
         jMenu1.add(jSeparator1);
 
-        jMenuItem3.setText("Exit");
-        jMenuItem3.addActionListener(this::jMenuItem3ActionPerformed);
-        jMenu1.add(jMenuItem3);
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(this::exitMenuItemActionPerformed);
+        jMenu1.add(exitMenuItem);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
 
         buttonGroup1.add(circleRadioButtonMenuItem);
-        circleRadioButtonMenuItem.setSelected(true);
         circleRadioButtonMenuItem.setText("Circle");
         jMenu2.add(circleRadioButtonMenuItem);
+        circleRadioButtonMenuItem.addActionListener(e -> startCircle());
 
         buttonGroup1.add(rectangleRadioButtonMenuItem);
         rectangleRadioButtonMenuItem.setText("Rectangle");
         jMenu2.add(rectangleRadioButtonMenuItem);
+        rectangleRadioButtonMenuItem.addActionListener(e -> startRectangle());
 
         buttonGroup1.add(triangleRadioButtonMenuItem);
         triangleRadioButtonMenuItem.setText("Triangle");
         jMenu2.add(triangleRadioButtonMenuItem);
+        triangleRadioButtonMenuItem.addActionListener(e -> startTriangle());
+
         jMenu2.add(jSeparator2);
 
         buttonGroup1.add(moveResizeRadioButtonMenuItem);
         moveResizeRadioButtonMenuItem.setText("Move / Resize");
+        moveResizeRadioButtonMenuItem.setSelected(true);
         jMenu2.add(moveResizeRadioButtonMenuItem);
 
         jMenuBar1.add(jMenu2);
@@ -130,32 +134,85 @@ public class MainJFrame extends javax.swing.JFrame {
 
         drawPanel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() != MouseEvent.BUTTON1) return;
                 if (moveResizeRadioButtonMenuItem.isSelected()) {
                     int x = e.getX();
                     int y = e.getY();
                     System.out.println(">>>" + x + " " + y);
+                    Figure f = drawPanel.findFigure(x,y);
+                    if (f!=null) {
+                        System.out.println(f);
+                        // todo select figure
+                    }
                 }
+                if (circleRadioButtonMenuItem.isSelected()) {
+                    builder.processPoint(e.getX(), e.getY());
+                }
+                if (rectangleRadioButtonMenuItem.isSelected()) {
+                    builder.processPoint(e.getX(), e.getY());
+                }
+                if (triangleRadioButtonMenuItem.isSelected()) {
+                    Figure figure = builder.processPoint(e.getX(), e.getY());
+                    if (figure != null) {
+                        drawPanel.addFigure(figure);
+                        repaint();
+                    }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.getButton()!=MouseEvent.BUTTON1) return;
+                if (circleRadioButtonMenuItem.isSelected()) {
+                    Figure figure = builder.processPoint(e.getX(), e.getY());
+                    drawPanel.addFigure(figure);
+                }
+                if (rectangleRadioButtonMenuItem.isSelected()) {
+                    Figure figure = builder.processPoint(e.getX(), e.getY());
+                    drawPanel.addFigure(figure);
+                }
+                if (triangleRadioButtonMenuItem.isSelected()) {
+                    builder.processPoint(e.getX(), e.getY());
+                }
+                repaint();
             }
         });
 
+        builder = new FigureBuilder(drawPanel.getLineColor(), drawPanel.getFillColor());
         pack();
+    }
+
+    private void startTriangle() {
+        builder.setMode(FigureBuilder.Mode.TRIANGLE);
+        builder.setLineColor(drawPanel.getLineColor());
+        builder.setFillColor(drawPanel.getFillColor());
+    }
+
+    private void startCircle() {
+        builder.setMode(FigureBuilder.Mode.CIRCLE);
+        builder.setLineColor(drawPanel.getLineColor());
+        builder.setFillColor(drawPanel.getFillColor());
+    }
+
+    private void startRectangle() {
+        builder.setMode(FigureBuilder.Mode.RECTANGLE);
+        builder.setLineColor(drawPanel.getLineColor());
+        builder.setFillColor(drawPanel.getFillColor());
     }
 
     private void saveMenuItemActionPerformed(ActionEvent actionEvent) {
         List<Figure> figures = drawPanel.getFigures();
-        FileManager.writeToFile(figures, "example.txt");
-    }
-
-    private void fillColorMenuItemActionPerformed(ActionEvent actionEvent) {
-        Color color = JColorChooser.showDialog(this, "Choose fill color for new figures", drawPanel.getFillColor());
-        drawPanel.setFillColor(color);
+        JFileChooser jFileChooser = new JFileChooser(".");
+        if (jFileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            String filename = jFileChooser.getSelectedFile().getName();
+            FileManager.writeToFile(figures, filename);
+        }
     }
 
     private void openMenuItemActionPerformed(ActionEvent evt) {
-        JFileChooser jFileChooser = new JFileChooser();
+        JFileChooser jFileChooser = new JFileChooser(".");
         if (jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-//            String filename = "figures.txt";
             String filename = jFileChooser.getSelectedFile().getName();
             List<Figure> figures = FileManager.readFromFile(filename);
             drawPanel.setFigures(figures);
@@ -167,9 +224,7 @@ public class MainJFrame extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(rootPane, "This is my program");
     }
 
-    private void jMenuItem3ActionPerformed(ActionEvent evt) {
-//        List<Figure> figures = drawPanel.getFigures();
-//        FileManager.writeToFile(figures, "example.txt");
+    private void exitMenuItemActionPerformed(ActionEvent evt) {
         System.exit(0);
     }
 
@@ -177,12 +232,20 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         Color color = JColorChooser.showDialog(this, "Choose line color for new figures", drawPanel.getLineColor());
         drawPanel.setLineColor(color);
+        builder.setLineColor(color);
     }
 
+    private void fillColorMenuItemActionPerformed(ActionEvent actionEvent) {
+        Color color = JColorChooser.showDialog(this, "Choose fill color for new figures", drawPanel.getFillColor());
+        drawPanel.setFillColor(color);
+        builder.setFillColor(color);
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainJFrame().setVisible(true));
     }
+
+    private FigureBuilder builder;
 
     private ButtonGroup buttonGroup1;
     private JMenu jMenu1;
@@ -191,7 +254,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private JMenuBar jMenuBar1;
     private JMenuItem openMenuItem;
     private JMenuItem saveMenuItem;
-    private JMenuItem jMenuItem3;
+    private JMenuItem exitMenuItem;
     private JMenuItem aboutMenuItem;
     private JMenuItem lineColorMenuItem;
     private JMenuItem fillColorMenuItem;

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MyPanel extends JPanel {
 
-    private List<Figure> figures;
+    private List<Figure> figures = new ArrayList<>();
     private Color lineColor = Color.BLACK;
     private Color fillColor = Color.WHITE;
 
@@ -25,6 +25,10 @@ public class MyPanel extends JPanel {
 
     public void setFigures(List<Figure> figures) {
         this.figures = figures;
+    }
+
+    public void addFigure(Figure figure) {
+        figures.add(figure);
     }
 
     public Color getLineColor() {
@@ -55,5 +59,13 @@ public class MyPanel extends JPanel {
                 figure.draw((Graphics2D) g);
             }
         }
+    }
+
+    public Figure findFigure(int x, int y) {
+        Point p = new Point(x, y);
+        for (int i = figures.size() - 1; i >= 0; i--) {
+            if (figures.get(i).containsPoint(p)) return figures.get(i);
+        }
+        return null;
     }
 }
