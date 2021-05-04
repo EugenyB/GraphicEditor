@@ -11,17 +11,17 @@ public class Rectangle extends Figure{
     @Override
     protected void drawSimple(Graphics2D g) {
         g.setColor(getFillColor());
-        int x1 = Integer.min(points[0].getX(), points[1].getX());
-        int y1 = Integer.min(points[0].getY(), points[1].getY());
-        int x2 = Integer.max(points[0].getX(), points[1].getX());
-        int y2 = Integer.max(points[0].getY(), points[1].getY());
+        int x1 = (int)Double.min(points[0].getX(), points[1].getX());
+        int y1 = (int)Double.min(points[0].getY(), points[1].getY());
+        int x2 = (int)Double.max(points[0].getX(), points[1].getX());
+        int y2 = (int)Double.max(points[0].getY(), points[1].getY());
         g.fillRect(x1 , y1, x2-x1, y2-y1);
         g.setColor(getLineColor());
         g.drawRect(x1 , y1, x2-x1, y2-y1);
     }
 
     @Override
-    protected void move(int dx, int dy) {
+    protected void move(double dx, double dy) {
         for (Point point : points) {
             point.setLocation(point.getX()+dx, point.getY()+dy);
         }
@@ -29,8 +29,8 @@ public class Rectangle extends Figure{
 
     @Override
     protected void scale(double factor) {
-        int sumX = 0;
-        int sumY = 0;
+        double sumX = 0;
+        double sumY = 0;
         for (Point point : points) {
             sumX += point.getX();
             sumY += point.getY();
@@ -40,19 +40,19 @@ public class Rectangle extends Figure{
 
         move(-sumX, -sumY);
         for (Point point : points) {
-            point.setLocation((int)(point.getX()*factor), (int)(point.getY()*factor));
+            point.setLocation(point.getX()*factor, point.getY()*factor);
         }
         move(sumX, sumY);
     }
 
     @Override
     protected boolean containsPoint(Point point) {
-        int x1 = Integer.min(points[0].getX(), points[1].getX());
-        int y1 = Integer.min(points[0].getY(), points[1].getY());
-        int x2 = Integer.max(points[0].getX(), points[1].getX());
-        int y2 = Integer.max(points[0].getY(), points[1].getY());
-        int x = point.getX();
-        int y = point.getY();
+        int x1 = (int) Double.min(points[0].getX(), points[1].getX());
+        int y1 = (int) Double.min(points[0].getY(), points[1].getY());
+        int x2 = (int) Double.max(points[0].getX(), points[1].getX());
+        int y2 = (int) Double.max(points[0].getY(), points[1].getY());
+        double x = point.getX();
+        double y = point.getY();
 
         return x>=x1 && x <=x2 && y>=y1 && y<=y2;
     }

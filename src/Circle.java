@@ -12,18 +12,18 @@ public class Circle extends Figure {
 
     @Override
     protected void drawSimple(Graphics2D g) {
-        int x = center.getX() - radius;
-        int y = center.getY() - radius;
+        double x = center.getX() - radius;
+        double y = center.getY() - radius;
         int diameter = 2 * radius;
 
         g.setColor(getFillColor());
-        g.fillOval(x, y, diameter, diameter);
+        g.fillOval((int)x, (int)y, diameter, diameter);
         g.setColor(getLineColor());
-        g.drawOval(x, y, diameter, diameter);
+        g.drawOval((int)x, (int)y, diameter, diameter);
     }
 
     @Override
-    public void move(int dx, int dy) {
+    public void move(double dx, double dy) {
         center = new Point(center.getX() + dx, center.getY() + dy);
     }
 

@@ -2,6 +2,7 @@
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPopupMenu.Separator;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -115,23 +116,30 @@ public class MainJFrame extends javax.swing.JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(drawPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(drawPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())
-        );
-
+//        GroupLayout layout = new GroupLayout(getContentPane());
+//        getContentPane().setLayout(layout);
+//        layout.setHorizontalGroup(
+//                layout.createParallelGroup(Alignment.LEADING)
+//                        .addGroup(layout.createSequentialGroup()
+//                                .addContainerGap()
+//                                .addComponent(drawPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//                                .addContainerGap())
+//        );
+//        layout.setVerticalGroup(
+//                layout.createParallelGroup(Alignment.LEADING)
+//                        .addGroup(layout.createSequentialGroup()
+//                                .addContainerGap()
+//                                .addComponent(drawPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//                                .addContainerGap())
+//        );
+        add(drawPanel);
+        JPanel topPanel = new JPanel();
+        lineColorPanel = new ColorPanel(Color.BLACK);
+        topPanel.add(lineColorPanel);
+        fillColorPanel = new ColorPanel(Color.WHITE);
+        topPanel.add(fillColorPanel);
+        topPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        add(topPanel, BorderLayout.NORTH);
         drawPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -142,7 +150,9 @@ public class MainJFrame extends javax.swing.JFrame {
                     //System.out.println(">>>" + x + " " + y);
                     Figure f = drawPanel.findFigure(x,y);
                     if (f!=null) {
-                        //System.out.println(f);
+                        if (f.isSelected()) {
+                            startMove(x,y);
+                        }
                         drawPanel.selectFigure(f);
                     }
                 }
@@ -164,6 +174,11 @@ public class MainJFrame extends javax.swing.JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton()!=MouseEvent.BUTTON1) return;
+                if (moveResizeRadioButtonMenuItem.isSelected()) {
+                    int x = e.getX();
+                    int y = e.getY();
+                    drawPanel.finishMove(x,y);
+                }
                 if (circleRadioButtonMenuItem.isSelected()) {
                     Figure figure = builder.processPoint(e.getX(), e.getY());
                     drawPanel.addFigure(figure);
@@ -183,6 +198,10 @@ public class MainJFrame extends javax.swing.JFrame {
 
         builder = new FigureBuilder(drawPanel.getLineColor(), drawPanel.getFillColor());
         pack();
+    }
+
+    private void startMove(int x, int y) {
+        drawPanel.setStartMovePoint(x,y);
     }
 
     private void processWheel(MouseWheelEvent e) {
@@ -252,11 +271,12 @@ public class MainJFrame extends javax.swing.JFrame {
             Color color = JColorChooser.showDialog(this, "Choose line color for new figures", drawPanel.getLineColor());
             drawPanel.setLineColor(color);
             builder.setLineColor(color);
+            lineColorPanel.setPanelColor(color);
         } else {
             Color color = JColorChooser.showDialog(this, "Choose line color for the figure", f.getLineColor());
             f.setLineColor(color);
-            repaint();
         }
+        repaint();
     }
 
     private void fillColorMenuItemActionPerformed(ActionEvent actionEvent) {
@@ -265,11 +285,12 @@ public class MainJFrame extends javax.swing.JFrame {
             Color color = JColorChooser.showDialog(this, "Choose fill color for new figures", drawPanel.getFillColor());
             drawPanel.setFillColor(color);
             builder.setFillColor(color);
+            fillColorPanel.setPanelColor(color);
         } else {
             Color color = JColorChooser.showDialog(this, "Choose fill color for the figure", f.getFillColor());
             f.setFillColor(color);
-            repaint();
         }
+        repaint();
     }
 
     public static void main(String[] args) {
@@ -297,5 +318,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private JRadioButtonMenuItem moveResizeRadioButtonMenuItem;
     private Separator jSeparator1;
     private Separator jSeparator2;
+    private ColorPanel lineColorPanel;
+    private ColorPanel fillColorPanel;
 
 }

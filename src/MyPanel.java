@@ -9,6 +9,8 @@ public class MyPanel extends JPanel {
     private Color lineColor = Color.BLACK;
     private Color fillColor = Color.WHITE;
 
+    private Point startMovePoint = null;
+
     public MyPanel() {
     }
 
@@ -74,5 +76,19 @@ public class MyPanel extends JPanel {
             if (figure.isSelected()) return figure;
         }
         return null;
+    }
+
+    public void setStartMovePoint(int x, int y) {
+        startMovePoint = new Point(x,y);
+    }
+
+    public void finishMove(int x, int y) {
+        if (startMovePoint == null) return;
+        Figure figure = getSelected();
+        if (figure == null) return;
+        double dx = x - startMovePoint.getX();
+        double dy = y - startMovePoint.getY();
+        figure.move(dx, dy);
+        startMovePoint = null;
     }
 }

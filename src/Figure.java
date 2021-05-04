@@ -15,8 +15,8 @@ public abstract class Figure {
         String[] s = line.split(" ");
         switch (s[0]) {
             case "C": {
-                int x = Integer.parseInt(s[1]);
-                int y = Integer.parseInt(s[2]);
+                double x = Double.parseDouble(s[1]);
+                double y = Double.parseDouble(s[2]);
                 int radius = Integer.parseInt(s[3]);
                 int lineColor = Integer.valueOf(s[4], 16);
                 int fillColor = Integer.valueOf(s[5], 16);
@@ -24,22 +24,22 @@ public abstract class Figure {
                 return new Circle(new Color(lineColor), new Color(fillColor), radius, new Point(x, y));
             }
             case "R": {
-                int x1 = Integer.parseInt(s[1]);
-                int y1 = Integer.parseInt(s[2]);
-                int x2 = Integer.parseInt(s[3]);
-                int y2 = Integer.parseInt(s[4]);
+                double x1 = Double.parseDouble(s[1]);
+                double y1 = Double.parseDouble(s[2]);
+                double x2 = Double.parseDouble(s[3]);
+                double y2 = Double.parseDouble(s[4]);
                 int lineColor = Integer.valueOf(s[5], 16);
                 int fillColor = Integer.valueOf(s[6], 16);
 
                 return new Rectangle(new Color(lineColor), new Color(fillColor), new Point(x1, y1), new Point(x2, y2));
             }
             case "T": {
-                int x1 = Integer.parseInt(s[1]);
-                int y1 = Integer.parseInt(s[2]);
-                int x2 = Integer.parseInt(s[3]);
-                int y2 = Integer.parseInt(s[4]);
-                int x3 = Integer.parseInt(s[5]);
-                int y3 = Integer.parseInt(s[6]);
+                double x1 = Double.parseDouble(s[1]);
+                double y1 = Double.parseDouble(s[2]);
+                double x2 = Double.parseDouble(s[3]);
+                double y2 = Double.parseDouble(s[4]);
+                double x3 = Double.parseDouble(s[5]);
+                double y3 = Double.parseDouble(s[6]);
                 int lineColor = Integer.valueOf(s[7], 16);
                 int fillColor = Integer.valueOf(s[8], 16);
 
@@ -66,7 +66,7 @@ public abstract class Figure {
 
     protected abstract void drawSimple(Graphics2D g);
 
-    protected abstract void move(int dx, int dy);
+    protected abstract void move(double dx, double dy);
 
     protected abstract void scale(double factor);
 
