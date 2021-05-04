@@ -139,11 +139,11 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (moveResizeRadioButtonMenuItem.isSelected()) {
                     int x = e.getX();
                     int y = e.getY();
-                    System.out.println(">>>" + x + " " + y);
+                    //System.out.println(">>>" + x + " " + y);
                     Figure f = drawPanel.findFigure(x,y);
                     if (f!=null) {
-                        System.out.println(f);
-                        // todo select figure
+                        //System.out.println(f);
+                        drawPanel.selectFigure(f);
                     }
                 }
                 if (circleRadioButtonMenuItem.isSelected()) {
@@ -179,23 +179,41 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
+        drawPanel.addMouseWheelListener(this::processWheel);
+
         builder = new FigureBuilder(drawPanel.getLineColor(), drawPanel.getFillColor());
         pack();
     }
 
+    private void processWheel(MouseWheelEvent e) {
+        Figure f;
+        if ((f = drawPanel.getSelected())!=null) {
+            //System.out.println("u>" + e.getUnitsToScroll());
+            if (e.getUnitsToScroll()<0) {
+                f.scale(0.9);
+            } else {
+                f.scale(1/0.9);
+            }
+        }
+        repaint();
+    }
+
     private void startTriangle() {
+        drawPanel.selectFigure(null);
         builder.setMode(FigureBuilder.Mode.TRIANGLE);
         builder.setLineColor(drawPanel.getLineColor());
         builder.setFillColor(drawPanel.getFillColor());
     }
 
     private void startCircle() {
+        drawPanel.selectFigure(null);
         builder.setMode(FigureBuilder.Mode.CIRCLE);
         builder.setLineColor(drawPanel.getLineColor());
         builder.setFillColor(drawPanel.getFillColor());
     }
 
     private void startRectangle() {
+        drawPanel.selectFigure(null);
         builder.setMode(FigureBuilder.Mode.RECTANGLE);
         builder.setLineColor(drawPanel.getLineColor());
         builder.setFillColor(drawPanel.getFillColor());
@@ -229,16 +247,29 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     private void lineColorMenuItemActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-        Color color = JColorChooser.showDialog(this, "Choose line color for new figures", drawPanel.getLineColor());
-        drawPanel.setLineColor(color);
-        builder.setLineColor(color);
+        Figure f;
+        if ((f = drawPanel.getSelected()) == null) {
+            Color color = JColorChooser.showDialog(this, "Choose line color for new figures", drawPanel.getLineColor());
+            drawPanel.setLineColor(color);
+            builder.setLineColor(color);
+        } else {
+            Color color = JColorChooser.showDialog(this, "Choose line color for the figure", f.getLineColor());
+            f.setLineColor(color);
+            repaint();
+        }
     }
 
     private void fillColorMenuItemActionPerformed(ActionEvent actionEvent) {
-        Color color = JColorChooser.showDialog(this, "Choose fill color for new figures", drawPanel.getFillColor());
-        drawPanel.setFillColor(color);
-        builder.setFillColor(color);
+        Figure f;
+        if ((f = drawPanel.getSelected()) == null) {
+            Color color = JColorChooser.showDialog(this, "Choose fill color for new figures", drawPanel.getFillColor());
+            drawPanel.setFillColor(color);
+            builder.setFillColor(color);
+        } else {
+            Color color = JColorChooser.showDialog(this, "Choose fill color for the figure", f.getFillColor());
+            f.setFillColor(color);
+            repaint();
+        }
     }
 
     public static void main(String[] args) {

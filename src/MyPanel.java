@@ -10,13 +10,6 @@ public class MyPanel extends JPanel {
     private Color fillColor = Color.WHITE;
 
     public MyPanel() {
-        //figures = FileManager.readFromFile("figures.txt");
-        // todo убрать в финальной версии
-        //figures.add(new Circle(Color.BLUE, Color.WHITE, 50, new Point(100,100)));
-        //figures.add(new Circle(Color.RED, Color.YELLOW, 70, new Point(200,200)));
-        //figures.add(new Triangle(Color.RED, Color.BLUE, new Point(100,100), new Point(200, 200), new Point(350, 200)));
-        //figures.add(new Rectangle(Color.GREEN, Color.MAGENTA, new Point(200,200), new Point(300, 300)));
-        // ------------------------------
     }
 
     public List<Figure> getFigures() {
@@ -65,6 +58,20 @@ public class MyPanel extends JPanel {
         Point p = new Point(x, y);
         for (int i = figures.size() - 1; i >= 0; i--) {
             if (figures.get(i).containsPoint(p)) return figures.get(i);
+        }
+        return null;
+    }
+
+    public void selectFigure(Figure f) {
+        for (Figure figure : figures) {
+            figure.setSelected(f == figure);
+        }
+        repaint();
+    }
+
+    public Figure getSelected() {
+        for (Figure figure : figures) {
+            if (figure.isSelected()) return figure;
         }
         return null;
     }

@@ -29,9 +29,20 @@ public class Rectangle extends Figure{
 
     @Override
     protected void scale(double factor) {
+        int sumX = 0;
+        int sumY = 0;
+        for (Point point : points) {
+            sumX += point.getX();
+            sumY += point.getY();
+        }
+        sumX /= 2;
+        sumY /= 2;
+
+        move(-sumX, -sumY);
         for (Point point : points) {
             point.setLocation((int)(point.getX()*factor), (int)(point.getY()*factor));
         }
+        move(sumX, sumY);
     }
 
     @Override
