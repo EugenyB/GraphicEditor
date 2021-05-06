@@ -1,15 +1,32 @@
 import java.awt.*;
 
+/**
+ * Abstract Closs for inheritance
+ * contains fields:  {@link #lineColor}, {@link #fillColor}
+ */
 public abstract class Figure {
+    /**
+     * Color of outline
+     */
     private Color lineColor;
+
+    /**
+     * Color of fill
+     */
     private Color fillColor;
     private boolean selected;
 
+    /**
+     * Constructs figure with specified line color and fill color
+     * @param lineColor color of outline
+     * @param fillColor color of fill
+     */
     public Figure(Color lineColor, Color fillColor) {
         this.lineColor = lineColor;
         this.fillColor = fillColor;
         selected = false;
     }
+
 
     public static Figure parseFigure(String line) {
         String[] s = line.split(" ");

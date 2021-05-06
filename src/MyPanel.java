@@ -14,6 +14,11 @@ public class MyPanel extends JPanel {
     public MyPanel() {
     }
 
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(800, 600);
+    }
+
     public List<Figure> getFigures() {
         return figures;
     }
@@ -56,6 +61,12 @@ public class MyPanel extends JPanel {
         }
     }
 
+    /**
+     * Search for figure by coordinates
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return found figure or null if no figure contains this point
+     */
     public Figure findFigure(int x, int y) {
         Point p = new Point(x, y);
         for (int i = figures.size() - 1; i >= 0; i--) {

@@ -2,31 +2,65 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Object for building figure step by step
+ */
 public class FigureBuilder {
 
+    /**
+     * Mode of creating figure:
+     * @see Mode
+     */
     public Mode mode = Mode.NONE;
     private Color lineColor;
     private Color fillColor;
-    private List<Point> points = new ArrayList<>();
 
+    /**
+     * points for new figure
+     */
+    private final List<Point> points = new ArrayList<>();
+
+    /**
+     * Creates new figure builder for next figure
+     * @param lineColor color of figure's outline
+     * @param fillColor color of figure's fill
+     */
     public FigureBuilder(Color lineColor, Color fillColor) {
         this.lineColor = lineColor;
         this.fillColor = fillColor;
     }
 
+    /**
+     * Change outline color of next figure
+     * @param lineColor selected color
+     */
     public void setLineColor(Color lineColor) {
         this.lineColor = lineColor;
     }
 
+    /**
+     * Change fill color of next figure
+     * @param fillColor selected color
+     */
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
     }
 
+    /**
+     * Change mode for creation of new figure
+     * @param mode mode of creation @see{@link Mode}
+     */
     public void setMode(Mode mode) {
         this.mode = mode;
         points.clear();
     }
 
+    /**
+     * Reacts for adding new point
+     * @param x coordinate x
+     * @param y coordinate y
+     * @return figure, if figure was created or null if still lack of points
+     */
     public Figure processPoint(int x, int y) {
         switch (mode) {
             case CIRCLE:
@@ -85,6 +119,15 @@ public class FigureBuilder {
         return new Circle(lineColor, fillColor, radius, points.get(0));
     }
 
+    /**
+     * Modes for figure creation:
+     * <ul>
+     * <li>NONE - editing</li>
+     * <li>CIRCLE - creation of circle</li>
+     * <li>RECTANGLE - creation of rectangle</li>
+     * <li>TRIANGLE - creation of triangle</li>
+     * </ul>
+     */
     public enum Mode {NONE, CIRCLE, RECTANGLE, TRIANGLE}
 
 }
