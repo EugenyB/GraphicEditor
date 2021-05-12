@@ -1,13 +1,31 @@
 import java.awt.*;
 import java.util.Arrays;
 
+/**
+ * Rectangle - subclass of Figure
+ * contains two Points - opposite vertexes
+ */
 public class Rectangle extends Figure{
+    /**
+     * Points representing rectangle's diagonal
+     */
     private Point[] points;
+
+    /**
+     * Constructor for Rectangle
+     * @param lineColor initial color of Circle's outline
+     * @param fillColor initial color of Circle's fill
+     * @param pts points for diagonal vertexes
+     */
     public Rectangle(Color lineColor, Color fillColor, Point... pts) {
         super(lineColor, fillColor);
         points = Arrays.copyOf( pts, 2);
     }
 
+    /**
+     * Draws simple (not selected) Rectangle
+     * @param g Graphic context
+     */
     @Override
     protected void drawSimple(Graphics2D g) {
         g.setColor(getFillColor());
@@ -20,6 +38,11 @@ public class Rectangle extends Figure{
         g.drawRect(x1 , y1, x2-x1, y2-y1);
     }
 
+    /**
+     * Moves Rectangle
+     * @param dx moving distance by X axis
+     * @param dy moving distance by Y axis
+     */
     @Override
     protected void move(double dx, double dy) {
         for (Point point : points) {
@@ -27,6 +50,10 @@ public class Rectangle extends Figure{
         }
     }
 
+    /**
+     * Scales Rectangle
+     * @param factor scaling factor
+     */
     @Override
     protected void scale(double factor) {
         double sumX = 0;
@@ -45,6 +72,11 @@ public class Rectangle extends Figure{
         move(sumX, sumY);
     }
 
+    /**
+     * Checks if point inside of Rectangle
+     * @param point checked point
+     * @return true if point is inside or false otherwise
+     */
     @Override
     protected boolean containsPoint(Point point) {
         int x1 = (int) Double.min(points[0].getX(), points[1].getX());
@@ -57,6 +89,10 @@ public class Rectangle extends Figure{
         return x>=x1 && x <=x2 && y>=y1 && y<=y2;
     }
 
+    /**
+     * Text representation of Rectangle for writing to text file
+     * @return text representation of Circle
+     */
     public String toString() {
         return "R " + points[0].getX() + " " + points[0].getY() + " "
                 + points[1].getX() + " " + points[1].getY() + " "

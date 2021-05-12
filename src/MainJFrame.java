@@ -35,13 +35,13 @@ public class MainJFrame extends javax.swing.JFrame {
         jMenu1 = new JMenu();
         openMenuItem = new JMenuItem();
         saveMenuItem = new JMenuItem();
-        jSeparator1 = new Separator();
+        Separator jSeparator1 = new Separator();
+        Separator jSeparator2 = new Separator();
         exitMenuItem = new JMenuItem();
         jMenu2 = new JMenu();
         circleRadioButtonMenuItem = new JRadioButtonMenuItem();
         rectangleRadioButtonMenuItem = new JRadioButtonMenuItem();
         triangleRadioButtonMenuItem = new JRadioButtonMenuItem();
-        jSeparator2 = new Separator();
         moveResizeRadioButtonMenuItem = new JRadioButtonMenuItem();
         jMenu3 = new JMenu();
         aboutMenuItem = new JMenuItem();
@@ -122,55 +122,11 @@ public class MainJFrame extends javax.swing.JFrame {
         drawPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() != MouseEvent.BUTTON1) return;
-                if (moveResizeRadioButtonMenuItem.isSelected()) {
-                    int x = e.getX();
-                    int y = e.getY();
-
-                    Figure f = drawPanel.findFigure(x,y);
-
-                    if (f!=null) {
-                        if (f.isSelected()) {
-                            startMove(x,y);
-                        }
-                        drawPanel.selectFigure(f);
-                    }
-                }
-                if (circleRadioButtonMenuItem.isSelected()) {
-                    builder.processPoint(e.getX(), e.getY());
-                }
-                if (rectangleRadioButtonMenuItem.isSelected()) {
-                    builder.processPoint(e.getX(), e.getY());
-                }
-                if (triangleRadioButtonMenuItem.isSelected()) {
-                    Figure figure = builder.processPoint(e.getX(), e.getY());
-                    if (figure != null) {
-                        drawPanel.addFigure(figure);
-                        repaint();
-                    }
-                }
+                processMousePressed(e);
             }
-
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (e.getButton()!=MouseEvent.BUTTON1) return;
-                if (moveResizeRadioButtonMenuItem.isSelected()) {
-                    int x = e.getX();
-                    int y = e.getY();
-                    finishMove(x,y);
-                }
-                if (circleRadioButtonMenuItem.isSelected()) {
-                    Figure figure = builder.processPoint(e.getX(), e.getY());
-                    drawPanel.addFigure(figure);
-                }
-                if (rectangleRadioButtonMenuItem.isSelected()) {
-                    Figure figure = builder.processPoint(e.getX(), e.getY());
-                    drawPanel.addFigure(figure);
-                }
-                if (triangleRadioButtonMenuItem.isSelected()) {
-                    builder.processPoint(e.getX(), e.getY());
-                }
-                repaint();
+                processMouseReleased(e);
             }
         });
 
@@ -178,6 +134,81 @@ public class MainJFrame extends javax.swing.JFrame {
 
         builder = new FigureBuilder(drawPanel.getLineColor(), drawPanel.getFillColor());
         pack();
+    }
+
+    /**
+     * Processing mouse release
+     * On Right Button - do nothing
+     * On Left Button:
+     * <ul>
+     *   <li>If mode Move / Resize - finish moving</li>
+     *   <li>If mode Circle: finish Circle selecting point on it and calculating radius</li>
+     *   <li>If mode Rectangle: finish Rectangle selecting opposite corner</li>
+     *   <li>If mode Triangle: continues Triangle selecting second point</li>
+     * </ul>
+     * @param e mouse event
+     */
+    private void processMouseReleased(MouseEvent e) {
+        if (e.getButton()!=MouseEvent.BUTTON1) return;
+        if (moveResizeRadioButtonMenuItem.isSelected()) {
+            int x = e.getX();
+            int y = e.getY();
+            finishMove(x,y);
+        }
+        if (circleRadioButtonMenuItem.isSelected()) {
+            Figure figure = builder.processPoint(e.getX(), e.getY());
+            drawPanel.addFigure(figure);
+        }
+        if (rectangleRadioButtonMenuItem.isSelected()) {
+            Figure figure = builder.processPoint(e.getX(), e.getY());
+            drawPanel.addFigure(figure);
+        }
+        if (triangleRadioButtonMenuItem.isSelected()) {
+            builder.processPoint(e.getX(), e.getY());
+        }
+        repaint();
+    }
+
+    /**
+     * Processing mouse press
+     * On Right Button - do nothing
+     * On Left Button:
+     * <ul>
+     *   <li>If mode Move / Resize - select figure, if was selected - start moving</li>
+     *   <li>If mode Circle: start Circle selecting it's center</li>
+     *   <li>If mode Rectangle: start Rectangle selecting one corner</li>
+     *   <li>If mode Triangle: first press - start Triangle selecting one point, second press - finish triangle selecting last point</li>
+     * </ul>
+     * @param e mouse event
+     */
+    private void processMousePressed(MouseEvent e) {
+        if (e.getButton() != MouseEvent.BUTTON1) return;
+        if (moveResizeRadioButtonMenuItem.isSelected()) {
+            int x = e.getX();
+            int y = e.getY();
+
+            Figure f = drawPanel.findFigure(x,y);
+
+            if (f!=null) {
+                if (f.isSelected()) {
+                    startMove(x,y);
+                }
+                drawPanel.selectFigure(f);
+            }
+        }
+        if (circleRadioButtonMenuItem.isSelected()) {
+            builder.processPoint(e.getX(), e.getY());
+        }
+        if (rectangleRadioButtonMenuItem.isSelected()) {
+            builder.processPoint(e.getX(), e.getY());
+        }
+        if (triangleRadioButtonMenuItem.isSelected()) {
+            Figure figure = builder.processPoint(e.getX(), e.getY());
+            if (figure != null) {
+                drawPanel.addFigure(figure);
+                repaint();
+            }
+        }
     }
 
     /**
@@ -333,6 +364,10 @@ public class MainJFrame extends javax.swing.JFrame {
         repaint();
     }
 
+    /**
+     * Starts program
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainJFrame().setVisible(true));
     }
@@ -359,8 +394,6 @@ public class MainJFrame extends javax.swing.JFrame {
     private JRadioButtonMenuItem rectangleRadioButtonMenuItem;
     private JRadioButtonMenuItem triangleRadioButtonMenuItem;
     private JRadioButtonMenuItem moveResizeRadioButtonMenuItem;
-    private Separator jSeparator1;
-    private Separator jSeparator2;
     private ColorPanel lineColorPanel;
     private ColorPanel fillColorPanel;
 

@@ -14,6 +14,10 @@ public abstract class Figure {
      * Color of fill
      */
     private Color fillColor;
+
+    /**
+     * Selection state of figure
+     */
     private boolean selected;
 
     /**
@@ -27,7 +31,11 @@ public abstract class Figure {
         selected = false;
     }
 
-
+    /**
+     * Parsing figure from text line and creates object of appropriate subclass
+     * @param line text for parsing
+     * @return parsed Figure (subclass) or null if line does not contains description of figure
+     */
     public static Figure parseFigure(String line) {
         String[] s = line.split(" ");
         switch (s[0]) {
@@ -67,6 +75,10 @@ public abstract class Figure {
         return null;
     }
 
+    /**
+     * Draws figure both: selected or not
+     * @param g Graphic context
+     */
     public void draw(Graphics2D g) {
         if (selected) {
             drawSelected(g);
@@ -75,40 +87,88 @@ public abstract class Figure {
         }
     }
 
+    /**
+     * Draws selected figure
+     * @param g Graphic context
+     */
     public void drawSelected(Graphics2D g) {
         g.setStroke(new BasicStroke(3));
         drawSimple(g);
         g.setStroke(new BasicStroke(1));
     }
 
+    /**
+     * Draws figure
+     * Abstract method for overriding in subclasses
+     * @param g Graphic context
+     */
     protected abstract void drawSimple(Graphics2D g);
 
+    /**
+     * Move figure on vector (dx, dy)
+     * @param dx moving distance by X axis
+     * @param dy moving distance by Y axis
+     */
     protected abstract void move(double dx, double dy);
 
+    /**
+     * Scale figure relative to it's center
+     * Center coordinates should be calculated as average of all point coordinates
+     * @param factor scaling factor
+     */
     protected abstract void scale(double factor);
 
+    /**
+     * Checks if point is inside of figure
+     * @param point checked point
+     * @return true - if figure contains point, false - otherwise
+     */
     protected abstract boolean containsPoint(Point point);
 
+    /**
+     * Retrieves color of figure's outline
+     * @return color of figure's outline
+     */
     public Color getLineColor() {
         return lineColor;
     }
 
+    /**
+     * Sets color of figure's outline
+     * @param lineColor new color of figure's outline
+     */
     public void setLineColor(Color lineColor) {
         this.lineColor = lineColor;
     }
 
+    /**
+     * Retrieves color of figure's fill
+     * @return color of figure's fill
+     */
     public Color getFillColor() {
         return fillColor;
     }
 
+    /**
+     * Sets color of figure's fill
+     * @param fillColor new color of figure's fill
+     */
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
     }
 
+    /**
+     * Checks if figure selected
+     * @return true if figure selected, false - otherwise
+     */
     public boolean isSelected() {
         return selected;
     }
 
+    /**
+     * Changes selected state of figure
+     * @param selected new state - selected (true) or not (false)
+     */
     public void setSelected(boolean selected) {
         this.selected = selected;
     }

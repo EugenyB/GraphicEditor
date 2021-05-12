@@ -12,7 +12,15 @@ public class FigureBuilder {
      * @see Mode
      */
     public Mode mode = Mode.NONE;
+
+    /**
+     * Color of outline for new figure
+     */
     private Color lineColor;
+
+    /**
+     * Color of fill for new figure
+     */
     private Color fillColor;
 
     /**
@@ -101,19 +109,33 @@ public class FigureBuilder {
         }
     }
 
+    /**
+     * Creates Triangle by list of points
+     * @param points list of point (must contain 3 points)
+     * @return created Triangle
+     */
     private Triangle createTriangle(List<Point> points) {
-        Point p1 = new Point(points.get(0).getX(), points.get(0).getY());
-        Point p2 = new Point(points.get(1).getX(), points.get(1).getY());
-        Point p3 = new Point(points.get(2).getX(), points.get(2).getY());
+        Point p1 = points.get(0);
+        Point p2 = points.get(1);
+        Point p3 = points.get(2);
         return new Triangle(lineColor, fillColor, p1, p2, p3);
     }
 
+    /**
+     * Creates Rectangle by list of points
+     * @param points list of point (must contain 2 points)
+     * @return created Rectangle
+     */
     private Rectangle createRectangle(List<Point> points) {
-        Point p1 = new Point(points.get(0).getX(), points.get(0).getY());
-        Point p2 = new Point(points.get(1).getX(), points.get(1).getY());
-        return new Rectangle(lineColor, fillColor, p1, p2);
+        return new Rectangle(lineColor, fillColor, points.get(0), points.get(1));
     }
 
+    /**
+     * Creates Circle by list of points.
+     * First point - will be center, second point - is point on Circle's outline, so radius may be calculated
+     * @param points list of point (must contain 2 points)
+     * @return created Circle
+     */
     private Circle createCircle(List<Point> points) {
         int radius = (int) Math.hypot(points.get(0).getX() - points.get(1).getX(), points.get(0).getY() - points.get(1).getY());
         return new Circle(lineColor, fillColor, radius, points.get(0));
